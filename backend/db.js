@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
-const mongoURI = "mongodb://localhost:27017"
-//const mongoURI = "mongodb+srv://mongo:mongo@cluster0.bc6y1hw.mongodb.net/schooldb?retryWrites=true&w=majority"
+require('dotenv').config();
+
 const connectToMongo = async () => {
-    try {
-        await mongoose.connect(mongoURI);
-        console.log("Connected to MongoDB");
-    } catch (err) {
-        console.error("Error connecting to MongoDB:", err);
-    }
+  try {
+    const uri = process.env.MONGODB_URI;
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log('Connected to MongoDB successfully');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+  }
 };
 
 module.exports = connectToMongo;

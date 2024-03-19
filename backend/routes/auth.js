@@ -11,7 +11,7 @@ const fetchuser = require('../middleware/fetchuser');
 router.post('/creteuser', [
     body('name', "Enter a Valid Name.").isLength({ min: 3 }),
     body('email', "Enter a Valid Email.").isEmail(),
-    body('password', "Enter a Valid Password of at least 5 characters.").isLength({ min: 5 })
+    body('password', "Enter a Valid Password of at least 5 characters.").isLength({ min: 1 })
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -60,12 +60,12 @@ router.post('/login', [
         const { email, password } = req.body;
         let user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ error: "Invalid credentials" });
+            return res.status(400).json({ error: "invalid Email" });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
-            return res.status(400).json({ error: "Invalid credentials" });
+            return res.status(400).json({ error: "Invalid Password" });
         }
 
         const payload = { user: { id: user.id } };
